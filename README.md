@@ -260,10 +260,6 @@ resource "aws_autoscaling_group" "TQO-asg" {
     value               = "TQO-ASG-Instance-\${aws:instance-id}"
     propagate_at_launch = true
   }
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 ```
 
