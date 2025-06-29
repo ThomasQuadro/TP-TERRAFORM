@@ -8,7 +8,7 @@
 ## 📁 Structure du projet
 
 ```bash
-tp-terraform-web/
+tp-terraform-TQO/
 ├── provider.tf         # Provider AWS
 ├── variables.tf        # Variables du projet
 ├── outputs.tf          # Valeur(s) affichée(s) à la fin
