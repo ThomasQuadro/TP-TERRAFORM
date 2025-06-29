@@ -1,13 +1,9 @@
-# ───────────────────────────────────────────────
 # VPC
-# ───────────────────────────────────────────────
 resource "aws_vpc" "TQO-main" {
   cidr_block = "10.0.0.0/16"
 }
 
-# ───────────────────────────────────────────────
 # Subnets
-# ───────────────────────────────────────────────
 resource "aws_subnet" "TQO-subnet1" {
   vpc_id                  = aws_vpc.TQO-main.id
   cidr_block              = "10.0.1.0/24"
@@ -22,16 +18,12 @@ resource "aws_subnet" "TQO-subnet2" {
   map_public_ip_on_launch = true
 }
 
-# ───────────────────────────────────────────────
 # Internet Gateway
-# ───────────────────────────────────────────────
 resource "aws_internet_gateway" "TQO-igw" {
   vpc_id = aws_vpc.TQO-main.id
 }
 
-# ───────────────────────────────────────────────
 # Route Table & Associations
-# ───────────────────────────────────────────────
 resource "aws_route_table" "TQO-rt" {
   vpc_id = aws_vpc.TQO-main.id
 
@@ -51,9 +43,7 @@ resource "aws_route_table_association" "TQO-a2" {
   route_table_id = aws_route_table.TQO-rt.id
 }
 
-# ───────────────────────────────────────────────
 # Security Group
-# ───────────────────────────────────────────────
 resource "aws_security_group" "TQO-web_sg" {
   name   = "TQO-web-sg"
   vpc_id = aws_vpc.TQO-main.id
@@ -80,9 +70,7 @@ resource "aws_security_group" "TQO-web_sg" {
   }
 }
 
-# ───────────────────────────────────────────────
 # Load Balancer
-# ───────────────────────────────────────────────
 resource "aws_lb" "TQO-web_lb" {
   name               = "TQO-web-lb"
   internal           = false
@@ -94,9 +82,7 @@ resource "aws_lb" "TQO-web_lb" {
   security_groups = [aws_security_group.TQO-web_sg.id]
 }
 
-# ───────────────────────────────────────────────
 # Target Group & Listener
-# ───────────────────────────────────────────────
 resource "aws_lb_target_group" "TQO-web_tg" {
   name     = "TQO-web-tg"
   port     = 80
@@ -115,9 +101,7 @@ resource "aws_lb_listener" "TQO-web_listener" {
   }
 }
 
-# ───────────────────────────────────────────────
 # Launch Template avec user_data (avec sudo)
-# ───────────────────────────────────────────────
 resource "aws_launch_template" "TQO-lt" {
   name_prefix   = "TQO-lt-"
   image_id      = var.ami_id
@@ -137,9 +121,7 @@ resource "aws_launch_template" "TQO-lt" {
   }
 }
 
-# ───────────────────────────────────────────────
 # Auto Scaling Group
-# ───────────────────────────────────────────────
 resource "aws_autoscaling_group" "TQO-asg" {
   name                = "TQO-asg"
   desired_capacity    = 2
